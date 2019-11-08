@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <style type="text/css">
+        .title {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+        }
+    a {
+        color: black;
+        font-size: 11pt;
+        font-weight: normal;
+        text-decoration: none;
+    }
+    a:hover {
+        color: darkblue;
+    }
+    </style>
+    </head>
+    <body>
+        <section data-main>Loading...</section>
+          <script type="text/javascript" src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+        <script>
+            // @see https://na7.salesforce.com/00OA0000004tddm
+            // Also need kampa, pin, sandbox.
+            var nodeArray = {
+              caf: 'https://hq-caf.salsalabs.com/dia/admin/',
+              cap: 'https://ssl1.americanprogress.org/dia/admin/',
+              cbd: 'https://hq-cbd.salsalabs.com/dia/admin/',
+              dccc: 'https://secure.mydccc.org/dia/admin/',
+              dlcc: 'https://dlcc.salsalabs.com/dia/admin/',
+              dscc: 'https://secure.democratsenators.org/dia/admin/',
+              eqfed: 'https://equalityfederation.salsalabs.com/dia/admin/',
+              ewg: 'https://hq-ewg.salsalabs.com/dia/admin/',
+              hfh: 'https://hq-hfh.salsalabs.com/dia/admin/',
+              kampa: 'https://kampa.salsalabs.com/dia/admin/',
+              kos: 'https://hq-kos.salsalabs.com/dia/admin/',
+              mddems: 'https://hq-mddems.salsalabs.com/dia/admin/',
+              midems: 'https://secure.mymichigandems.com/dia/admin/',
+              ne: 'https://ne.salsalabs.com/dia/admin/',
+              org: 'https://hq-org.salsalabs.com/dia/admin/',
+              org2: 'https://hq-org2.salsalabs.com/dia/admin/',
+              pin: 'https://pin.salsalabs.com/dia/admin/',
+              qb: 'https://qb.salsalabs.com/dia/admin/',
+              qz: 'https://qz.salsalabs.com/dia/admin/',
+              salsa3: 'https://salsa3.salsalabs.com/dia/admin/',
+              salsa4: 'https://salsa4.salsalabs.com/dia/admin/',
+              sandbox: 'https://sandbox.salsalabs.com/dia/admin/',
+              scdems: 'https://secure.myscdems.org/dia/admin/',
+              statevoices: 'https://hq-statevoices.salsalabs.com/dia/admin/',
+              tcrp: 'https://hq-tcrp.salsalabs.com/dia/admin/',
+              wfc: 'https://salsa.wiredforchange.com/dia/admin/',
+              wfc2: 'https://wfc2.wiredforchange.com/dia/admin/'
+            };
+
+            var orgLookupStr = 'index.jsp?organization_KEY=';
+            var chapterLookupStr = '&chapter_KEY=';
+            var Zclient = ZAFClient.init();
+            events();
+
+            // Here we define events such as a user clicking on something
+            function events() {
+                
+              Zclient.on('app.registered', function() {
+                Zclient.invoke('resize', { width: '100%', height: '30px' });
+              });
+                        
+              // The app is active
+              Zclient.on('app.activated', setLinks());
+
+              // Node, org, or chapter values are changed
+              Zclient.on('ticket.custom_field_480681.changed', function(e) { setLinks();});
+              Zclient.on('ticket.custom_field_250065.changed', function(e) { setLinks();});
+              Zclient.on('ticket.custom_field_250067.changed', function(e) { setLinks();});
+
+            }
+
+            // Below this point, you're free to define your own functions used by the app
+
+            function setLinks() {
+                
+              var nodeLink = "";
+              var orgLink = "";
+              var chapterLink = "";
+              var masterLink = "";
+              var HTMLBuilder = "";    
+              var mainSectionEl = document.querySelector('section[data-main]');
+                
+              Zclient.get(['ticket.customField:custom_field_480681', 'ticket.customField:custom_field_250065','ticket.customField:custom_field_250067']).then(function(data){
+                  var NodeFieldInput = data['ticket.customField:custom_field_480681'];
+                  var OrgFieldInput = data['ticket.customField:custom_field_250065'];
+                  var ChapterFieldInput = data['ticket.customField:custom_field_250067']; 
+
+                  if (NodeFieldInput && (NodeFieldInput !== "")) {
+                    if (nodeArray[NodeFieldInput]) {
+                        
+                      nodeLink = nodeArray[NodeFieldInput];
+                      HTMLBuilder += "<td class='title'>Node:&nbsp;<a class = 'title' href='" + nodeLink + "' target='_blank'>" + NodeFieldInput + "</a>&nbsp;</td>";
+                        
+                      if (OrgFieldInput && (OrgFieldInput !== "")) {
+                          
+                        orgLink = nodeLink + orgLookupStr + OrgFieldInput;
+                        HTMLBuilder += "<td class='title'>Org:&nbsp;<a class='title' href='" + orgLink + "' target='_blank'>" + OrgFieldInput + "</a>&nbsp;</td>";
+                          
+                        if (ChapterFieldInput && (ChapterFieldInput > 0) && (ChapterFieldInput !== "")) {
+                          chapterLink = orgLink + chapterLookupStr + ChapterFieldInput;
+                          HTMLBuilder += "<td class='title'>Chapter:&nbsp;<a class='title' href='" + chapterLink + "' target='_blank'>" + ChapterFieldInput + "</a>&nbsp;</td>";
+                        }
+                      }
+                    }
+                  }
+
+                  mainSectionEl.innerHTML = "<table><tr>" + HTMLBuilder +"</tr></table>";
+             });
+
+            }
+
+        </script>
+    </body>
+</html>
