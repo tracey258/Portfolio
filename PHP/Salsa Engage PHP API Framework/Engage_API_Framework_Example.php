@@ -3,8 +3,8 @@
 // Use the Engage API Framework PHP
 require 'Engage_API_Framework.php';
 
-$IntAuthToken = "kJaajG-TYmF2-xJf2mmb7VH4e5r3mZ_qVyeB_nGonm5I1UGXEibQAsY-7X6PrueNnBHm5Mzbb5ici_5_XdVvFHKY5C5IXE2JI02VbiUsgx8";
-$DevAuthToken = "kJaajG-TYmF2-xJf2mmb7VH4e5r3mZ_qVyeB_nGonm6Gf6kFZtndVBq9y5n1znX9XbsaLBptZY12bY8CK9POolOEwgoLXRhEYS-npx7s7vczOCMITBe5zlIhDWvx-X5U";
+$IntAuthToken = "";
+$DevAuthToken = "";
 $UATUri = 'https://hq.uat.igniteaction.net';
 $IntUri = 'https://api.salsalabs.org';
 $DevUri = 'https://dev-api.salsalabs.org';
