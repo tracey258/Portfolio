@@ -812,6 +812,4 @@ catch (Exception $e)
 //*** END UPDATE ***
 
 dbgEcho("<=== Files created End Program ====>\n", dbgHighOn);
-
-//TODO: Use ZD trigger to send Jordan(using ZD Agent ID) the HTML Logs
 ?>
